@@ -516,6 +516,7 @@ class ComposerStaticInit330099ec73ce7dd5d363e75a77af751d
         'App\\Http\\Controllers\\Admin\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CategoryController.php',
         'App\\Http\\Controllers\\Admin\\IndexController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/IndexController.php',
         'App\\Http\\Controllers\\Admin\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ProductController.php',
+        'App\\Http\\Controllers\\Admin\\ProductVariantController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ProductVariantController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',

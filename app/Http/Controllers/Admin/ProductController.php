@@ -94,7 +94,7 @@ class ProductController extends Controller
             $product->meta_description = $request['meta_description'];
             $product->meta_keywords = $request['meta_keywords'] ?? "";
             $product->save();
-            $otherImges = $request->other_images;
+            $otherImges = $request->other_images; //array
             foreach ($otherImges as $otherImage) {
                 $otherImageResp = $this->uploadImage($otherImage, config('constants.storePath') . config('constants.product.other_image'));
                 if ($otherImageResp['_status']) {
@@ -164,7 +164,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        
+        p($request->all());
     }
 
     /**

@@ -11,6 +11,29 @@
     @endpush
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+        <div class="modal fade" id="modal" aria-modal="true" role="dialog"
+            style="padding-right: 17px;background:rgba(0, 0, 0, 0.7)">
+            <div class="modal-dialog modal-m">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Old Price</h4>
+                        <button type="button" onclick="closeModel()" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" onclick="closeModel()"
+                            data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Edit</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
@@ -104,6 +127,10 @@
                                                 </div>
                                             </td>
                                             <td>
+                                                <i class="fa fa-eye" data-toggle="tooltip" data-placement="right"
+                                                    title="View old prices"
+                                                    onclick="viewOldPrice({{ $variant->variant_id }})"></i>
+                                                &nbsp;
                                                 <a
                                                     href="{{ route('admin.product.variant.edit', ['productVariant' => $variant->variant_id]) }}">
                                                     <i class="fa fa-pencil-alt text-primary" data-toggle="tooltip"
@@ -163,6 +190,68 @@
                     $(elem).attr("disabled", false);
                 }
             })
+        }
+        /*
+          beforeSend: function() {
+                    product_modal.classList.add('show')
+                    product_modal.style.display = "block";
+                    $('.modal-body').html("Loading data...");
+                },
+        */
+        function viewOldPrice(vId) {
+            $.ajax({
+                url: `{{ url('admin/product/variant/view-old-price/${vId}') }}`,
+                type: "get",
+                beforeSend: function() {
+                    modal.classList.add('show')
+                    modal.style.display = "block";
+                    $('.modal-body').html("Loading data...");
+                },
+                success: function(response) {
+                    let tbody;
+                    if (response.data.length == 0) {
+                        tbody = [
+                            `
+                                <tr align="center">
+                                    <td colspan="2"> No data found </td> 
+                                </tr>                                    
+                            `
+                        ];
+                    } else {
+                        tbody = response.data.map(
+                            function(d) {
+                                return `
+                                <tr>
+                                    <td> ${d.created_at} </td> 
+                                    <td> ${d.old_price} </td> 
+                                </tr>                                    
+                            `
+                            }
+                        );
+                    }
+
+                    $('.modal-body').html(
+                        `
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th> Changed Date </th>
+                                            <th> Old Pirce </th>
+                                        </tr>                                            
+                                    </thead>
+                                    <tbody>
+                                        ${tbody.join(" ")}
+                                    </body>
+                                </table>
+                            `
+                    )
+                }
+            })
+        }
+
+        function closeModel() {
+            modal.classList.remove('show')
+            modal.style.display = "";
         }
     </script>
 @endpush

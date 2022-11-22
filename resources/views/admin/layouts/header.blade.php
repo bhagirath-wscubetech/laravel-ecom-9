@@ -198,7 +198,7 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Alexander Pierce</a>
+                        <a href="#" class="d-block">{{ session()->get('admin_name') }}</a>
                     </div>
                 </div>
 
@@ -263,38 +263,51 @@
                             </ul>
                         </li>
                         <li class="nav-item {{ checkMenuName('product') ? 'menu-open' : '' }}">
-                          <a href="#" class="nav-link">
-                              <i class="nav-icon fas fa-list-alt"></i>
-                              <p>
-                                  Product
-                                  <i class="right fas fa-angle-left"></i>
-                              </p>
-                          </a>
-                          <ul class="nav nav-treeview">
-                              <li class="nav-item">
-                                  <a href="{{ route('admin.product.create') }}"
-                                      class="nav-link {{ checkSubMenuName('create') ? 'active' : '' }}">
-                                      <i class="far fa-circle nav-icon"></i>
-                                      <p>Add</p>
-                                  </a>
-                              </li>
-                              <li class="nav-item">
-                                  <a href="{{ route('admin.product.index') }}"
-                                      class="nav-link {{ checkSubMenuName('view') ? 'active' : '' }}">
-                                      <i class="far fa-circle nav-icon"></i>
-                                      <p>View</p>
-                                  </a>
-                              </li>
-                              <li class="nav-item">
-                                  <a href="{{ route('admin.product.trash') }}"
-                                      class="nav-link {{ checkSubMenuName('trash') ? 'active' : '' }}">
-                                      <i class="far fa-circle nav-icon"></i>
-                                      <p>Trash</p>
-                                  </a>
-                              </li>
-                          </ul>
-                      </li>
-
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-list-alt"></i>
+                                <p>
+                                    Product
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.product.create') }}"
+                                        class="nav-link {{ checkSubMenuName('create') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Add</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.product.index') }}"
+                                        class="nav-link {{ checkSubMenuName('view') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>View</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.product.trash') }}"
+                                        class="nav-link {{ checkSubMenuName('trash') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Trash</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @if (session()->get('admin_role') == '1')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.register') }}">
+                                    <i class="nav-icon fa fa-user"></i>
+                                    Register Admin
+                                </a>
+                            </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.logout') }}">
+                                <i class="nav-icon fa fa-arrow-left"></i>
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

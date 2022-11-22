@@ -20,13 +20,11 @@ class ProductVariantController extends Controller
     {
         setMenuStatus("product", "");
         $title = "Product - Variant";
-        $product = Product::with(
-            [
-                'product_variant' => function ($q) {
-                    $q->orderBy('size', 'asc');
-                }
-            ]
-        )->find($product_id);
+        $product = Product::with([
+            'product_variant' => function ($query) {
+                $query->orderBy('size', 'asc');
+            }
+        ])->find($product_id);
         $data = compact('title', 'product');
         return view('admin.product.variant.view')->with($data);
     }
@@ -169,5 +167,13 @@ class ProductVariantController extends Controller
                 'status' => 1
             ]);
         }
+    }
+    public function viewOldPrice($variant)
+    {
+        $variantOld = DB::table('variant_old')->where('variant_id', $variant)->orderBy('id', 'desc')->get();
+        return response()->json([
+            'data' =>  $variantOld,
+            'status' => 1
+        ]);
     }
 }
