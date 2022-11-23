@@ -62,6 +62,15 @@ if (!function_exists('checkSubMenuName')) {
     }
 }
 
+if (!function_exists('get_key')) {
+    function get_key()
+    {
+        return md5(time() . time() . rand(1, 100000));
+    }
+}
+
+
+
 // if (!function_exists('uploadFile')) {
 //     function uploadFile($file, $dest)
 //     {

@@ -7,6 +7,7 @@ use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Models\AdminPasswordReset;
 
 class AdminController extends Controller
 {
@@ -80,7 +81,7 @@ class AdminController extends Controller
             $admin->admin_email = $request->email;
             $admin->admin_password = Hash::make($request->password);
             $admin->save();
-            DB::commit();   
+            DB::commit();
         } catch (\Exception $err) {
             DB::rollBack();
             $admin = null;
@@ -97,5 +98,61 @@ class AdminController extends Controller
     {
         $admins = Admin::get();
         p($admins->toArray());
+    }
+
+    public function forgotPassword()
+    {
+        return view('admin.forgot-password');
+    }
+
+    public function resetPassword($key)
+    {
+        $key = AdminPasswordReset::with('getAdmin')->where('key', $key)->first();
+        if (is_null($key)) {
+            return abort(404);
+        } else {
+            $data = [
+                'key' => $key
+            ];
+            return view('admin.reset-password')->with($data);
+        }
+    }
+
+
+    public function getForgotPasswordCode(Request $request)
+    {
+        $request->validate(
+            [
+                'email' => 'required|email',
+            ]
+        );
+
+        $admin = Admin::where('admin_email', $request->email)->first();
+        if (is_null($admin)) {
+            return redirect()->back()->withErrors("Invalid email provided")->withInput();
+        } else {
+            $data = AdminPasswordReset::where('email', $request->email)->first();
+            if (!is_null($data)) {
+                $data->delete();
+            }
+            $key = get_key();
+            $passwordKey = new AdminPasswordReset();
+            $passwordKey->email = $request->email;
+            $passwordKey->key = $key;
+            $passwordKey->save();
+            echo route('admin.resetPassword', ['key' => $key]);
+            return;
+        }
+    }
+    public function updatePassword(Request $request)
+    {
+        $admin = Admin::where('admin_email', $request->email)->first();
+        if (is_null($admin)) {
+            return redirect()->back()->withErrors('Invalid email provided');
+        } else {
+            $admin->admin_password = Hash::make($request->password);
+            $admin->save();
+            return redirect('/admin/login')->withSuccess('Password changed successfully');
+        }
     }
 }

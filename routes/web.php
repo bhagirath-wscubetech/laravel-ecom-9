@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 /*
@@ -49,6 +50,10 @@ Route::prefix('/admin')->group(
             function () {
                 Route::get('/login', [AdminController::class, 'index']);
                 Route::post('/login', [AdminController::class, 'login'])->name('admin.login');
+                Route::get('/forgot-password', [AdminController::class, 'forgotPassword'])->name('admin.forgotpassword');
+                Route::post('/forgot-password', [AdminController::class, 'getForgotPasswordCode'])->name('admin.forgotpassword');
+                Route::get('/reset-password/{key}', [AdminController::class, 'resetPassword'])->name('admin.resetPassword');
+                Route::post('/update-password', [AdminController::class, 'updatePassword'])->name('admin.updatePassword');
             }
         );
         Route::get('/logout', function () {
