@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CountryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
-use App\Models\Admin;
+use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\CityController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 /*
@@ -20,13 +22,8 @@ use Illuminate\Support\Facades\Hash;
 |
 */
 
-// Route::get('/test',function(){
-//     $pass = 12345678;
-//     $hashPass = Hash::make($pass);
-//     echo "<br>";
-//     echo $hashPass;
-//     echo "<br>";
-//     var_dump(Hash::check($pass,$hashPass));
+// Route::get('/test', function () {
+
 // });
 
 Route::get('/clear-cache', function () {
@@ -62,7 +59,7 @@ Route::prefix('/admin')->group(
         })->name('admin.logout');
         Route::middleware('is_admin')->group(
             function () {
-                // Admin Registration
+                // Admin Registration   
                 Route::middleware('super_admin')->group(
                     function () {
                         Route::get('/register', [AdminController::class, 'register'])->name("admin.register");
@@ -89,6 +86,52 @@ Route::prefix('/admin')->group(
                         Route::get('/restore/{id}', [CategoryController::class, 'restore'])->name('admin.category.restore');
                         Route::get('/force-delete/{category}', [CategoryController::class, 'forceDestroy'])->name('admin.category.forceDelete');
                         Route::get('/toggle-status/{category}', [CategoryController::class, 'toggleStatus'])->name('admin.category.toggleStatus');
+                    }
+                );
+                Route::prefix('/country')->group(
+                    function () {
+                        Route::get("/", [CountryController::class, 'index'])->name('admin.country.index');
+                        Route::get("/trash", [CountryController::class, 'trash'])->name('admin.country.trash');
+                        Route::get("/create", [CountryController::class, 'create'])->name('admin.country.create');
+                        Route::post("/store", [CountryController::class, 'store'])->name('admin.country.store');
+                        Route::get("/edit/{country}", [CountryController::class, 'edit'])->name('admin.country.edit');
+                        Route::post("/update/{country}", [CountryController::class, 'update'])->name('admin.country.update');
+                        Route::get("/check-name/{name}/{id?}", [CountryController::class, 'checkCountryName']);
+                        Route::get('/delete/{country}', [CountryController::class, 'destroy'])->name('admin.country.delete');
+                        Route::get('/restore/{id}', [CountryController::class, 'restore'])->name('admin.country.restore');
+                        Route::get('/force-delete/{country}', [CountryController::class, 'forceDestroy'])->name('admin.country.forceDelete');
+                        Route::get('/toggle-status/{country}', [CountryController::class, 'toggleStatus'])->name('admin.country.toggleStatus');
+                    }
+                );
+                Route::prefix('/state')->group(
+                    function () {
+                        Route::get("/", [StateController::class, 'index'])->name('admin.state.index');
+                        Route::get("/trash", [StateController::class, 'trash'])->name('admin.state.trash');
+                        Route::get("/create", [StateController::class, 'create'])->name('admin.state.create');
+                        Route::post("/store", [StateController::class, 'store'])->name('admin.state.store');
+                        Route::get("/edit/{state}", [StateController::class, 'edit'])->name('admin.state.edit');
+                        Route::post("/update/{state}", [StateController::class, 'update'])->name('admin.state.update');
+                        Route::get("/check-name/{name}/{id?}", [StateController::class, 'checkstateName']);
+                        Route::get('/delete/{state}', [StateController::class, 'destroy'])->name('admin.state.delete');
+                        Route::get('/restore/{id}', [StateController::class, 'restore'])->name('admin.state.restore');
+                        Route::get('/force-delete/{state}', [StateController::class, 'forceDestroy'])->name('admin.state.forceDelete');
+                        Route::get('/toggle-status/{state}', [StateController::class, 'toggleStatus'])->name('admin.state.toggleStatus');
+                        Route::get('/get-states/{country}', [StateController::class, 'getStates']);
+                    }
+                );
+                Route::prefix('/city')->group(
+                    function () {
+                        Route::get("/", [CityController::class, 'index'])->name('admin.city.index');
+                        Route::get("/trash", [CityController::class, 'trash'])->name('admin.city.trash');
+                        Route::get("/create", [CityController::class, 'create'])->name('admin.city.create');
+                        Route::post("/store", [CityController::class, 'store'])->name('admin.city.store');
+                        Route::get("/edit/{city}", [CityController::class, 'edit'])->name('admin.city.edit');
+                        Route::post("/update/{city}", [CityController::class, 'update'])->name('admin.city.update');
+                        Route::get("/check-name/{name}/{id?}", [CityController::class, 'checkcityName']);
+                        Route::get('/delete/{city}', [CityController::class, 'destroy'])->name('admin.city.delete');
+                        Route::get('/restore/{id}', [CityController::class, 'restore'])->name('admin.city.restore');
+                        Route::get('/force-delete/{city}', [CityController::class, 'forceDestroy'])->name('admin.city.forceDelete');
+                        Route::get('/toggle-status/{city}', [CityController::class, 'toggleStatus'])->name('admin.city.toggleStatus');
                     }
                 );
                 // ---------------
